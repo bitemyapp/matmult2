@@ -9,6 +9,13 @@ crossbeam = "0.8.5"
 divan = "0.1.21"
 rand = "0.10.3"
 
+[profile.bench]
+#debug = true # enable for samply runs
+
 [[bench]]
 name = "bench_mult"
 harness = false
+
+[profile.samply]
+inherits = "release"
+debug = true

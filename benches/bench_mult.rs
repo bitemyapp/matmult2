@@ -1,5 +1,6 @@
 use divan::{Bencher, black_box};
 use matmult2::FlatMatrix;
+use matmult2::fused_mul_add;
 use matmult2::naive_local_mult;
 use matmult2::naive_mult;
 use matmult2::parallel_tiled_mult;
@@ -30,6 +31,7 @@ fn cart_prod(v1: &[usize], v2: &[usize]) -> Vec<(usize, usize)> {
 }
 
 #[divan::bench]
+#[ignore]
 fn naive(bencher: Bencher) {
     let (a, b) = setup(MAT_SIZE);
     bencher.bench_local(|| {
@@ -38,6 +40,7 @@ fn naive(bencher: Bencher) {
 }
 
 #[divan::bench]
+#[ignore]
 fn local_acc(bencher: Bencher) {
     let (a, b) = setup(MAT_SIZE);
     bencher.bench_local(|| {
@@ -45,7 +48,16 @@ fn local_acc(bencher: Bencher) {
     });
 }
 
+#[divan::bench]
+fn fused_mul_add_bench(bencher: Bencher) {
+    let (a, b) = setup(MAT_SIZE);
+    bencher.bench_local(|| {
+        black_box(fused_mul_add(&a, &b));
+    });
+}
+
 #[divan::bench(args = TILE_SIZES)]
+#[ignore]
 fn tiled(bencher: Bencher, tile_size: usize) {
     let (a, b) = setup(MAT_SIZE);
     bencher.bench_local(|| {
@@ -54,6 +66,7 @@ fn tiled(bencher: Bencher, tile_size: usize) {
 }
 
 #[divan::bench(args = cart_prod(TILE_SIZES, THREAD_COUNTS))]
+#[ignore]
 fn par_tiled(bencher: Bencher, arg: (usize, usize)) {
     let (tile_size, thread_count) = arg;
     let (a, b) = setup(MAT_SIZE);

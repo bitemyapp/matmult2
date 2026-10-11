@@ -94,3 +94,9 @@ bench_mult      fastest       │ slowest       │ median        │ mean      
    ├─ 128       1.037 s       │ 1.234 s       │ 1.081 s       │ 1.076 s       │ 100     │ 100
    ├─ 256       1.079 s       │ 1.575 s       │ 1.107 s       │ 1.116 s       │ 100     │ 100
    ╰─ 512       1.07 s        │ 1.261 s       │ 1.097 s       │ 1.104 s       │ 100     │ 100
+
+## Fused Multiply-Add
+
+Timer precision: 41 ns
+bench_mult              fastest       │ slowest       │ median        │ mean          │ samples │ iters
+├─ fused_mul_add_bench  1.219 s       │ 1.825 s       │ 1.257 s       │ 1.278 s       │ 100     │ 100

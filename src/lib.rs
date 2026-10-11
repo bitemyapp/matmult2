@@ -100,6 +100,24 @@ pub fn naive_local_mult(m1: &FlatMatrix, m2: &FlatMatrix) -> FlatMatrix {
     out
 }
 
+pub fn fused_mul_add(m1: &FlatMatrix, m2: &FlatMatrix) -> FlatMatrix {
+    validate_dimensions(m1, m2);
+
+    let mut out = FlatMatrix::new(m1.rows, m2.cols);
+
+    for i in 0..m1.rows {
+        for j in 0..m2.cols {
+            let mut acc = 0.0;
+            for k in 0..m1.cols {
+                acc = m1.at(i, k).mul_add(m2.at(k, j), acc);
+            }
+            out.set(i, j, acc);
+        }
+    }
+
+    out
+}
+
 pub fn tiled_mult(m1: &FlatMatrix, m2: &FlatMatrix, tile_size: usize) -> FlatMatrix {
     validate_dimensions(m1, m2);
 
