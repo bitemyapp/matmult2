@@ -53,6 +53,7 @@ impl CpuMultiplier {
 pub fn accelerate_mult(a: &FlatMatrix, b: &FlatMatrix) -> FlatMatrix {
     #[link(name = "Accelerate", kind = "framework")]
     unsafe extern "C" {
+        #[link_name = "cblas_dgemm$NEWLAPACK"]
         fn cblas_dgemm(order: i32, trans_a: i32, trans_b: i32,
             m: i32, n: i32, k: i32, alpha: f64, a: *const f64, lda: i32,
             b: *const f64, ldb: i32, beta: f64, c: *mut f64, ldc: i32);
