@@ -1,6 +1,24 @@
 use super::*;
 use approx::assert_abs_diff_eq;
 
+#[test]
+fn ordered_matches_reference_bits() {
+    for (m, k, n) in [(0, 3, 2), (3, 0, 2), (3, 2, 0), (1, 1, 1),
+        (3, 5, 7), (63, 64, 65), (65, 129, 67), (128, 127, 129)] {
+        let mut a = FlatMatrix::new(m, k);
+        let mut b = FlatMatrix::new(k, n);
+        random_fill(&mut a, 1);
+        random_fill(&mut b, 2);
+        for x in &mut a.vals { *x = *x * 2.0 - 1.0; }
+        for x in &mut b.vals { *x = *x * 2.0 - 1.0; }
+        let reference = naive_local_mult(&a, &b);
+        let actual = ordered_mult(&a, &b);
+        assert_eq!((actual.rows, actual.cols), (m, n));
+        assert_eq!(reference.vals.iter().map(|x| x.to_bits()).collect::<Vec<_>>(),
+                   actual.vals.iter().map(|x| x.to_bits()).collect::<Vec<_>>());
+    }
+}
+
 fn assert_approx_eq(a: &FlatMatrix, b: &FlatMatrix, tolerance: f64) {
     assert_eq!(a.rows, b.rows);
     assert_eq!(a.cols, b.cols);

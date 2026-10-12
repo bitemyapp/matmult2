@@ -2,6 +2,9 @@ use rand::{RngExt, SeedableRng, rngs::SmallRng};
 use std::cmp::min;
 use std::mem::swap;
 
+mod optimized;
+pub use optimized::ordered_mult;
+
 #[derive(PartialEq, Debug)]
 pub struct FlatMatrix {
     rows: usize,

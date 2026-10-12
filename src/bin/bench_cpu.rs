@@ -21,9 +21,14 @@ fn main() {
         "tiled" => tiled_mult(black_box(&a), black_box(&b), tile),
         "parallel" => parallel_tiled_mult(black_box(&a), black_box(&b), tile, threads),
         "fused" => fused_mul_add(black_box(&a), black_box(&b)),
+        "ordered" => ordered_mult(black_box(&a), black_box(&b)),
         _ => panic!("unknown algorithm: {algorithm}"),
     };
     let result = multiply();
+    if let Some(path) = std::env::var_os("DUMP_RESULT") {
+        let bytes: Vec<u8> = result.as_slice().iter().flat_map(|v| v.to_le_bytes()).collect();
+        std::fs::write(path, bytes).unwrap();
+    }
     let checksum: f64 = result.as_slice().iter().sum();
     if std::env::var_os("VERIFY").is_some() {
         let reference = naive_local_mult(&a, &b);
