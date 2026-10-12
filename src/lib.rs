@@ -3,9 +3,9 @@ use std::cmp::min;
 use std::mem::swap;
 
 mod optimized;
-pub use optimized::{CpuMultiplier, ordered_mult};
 #[cfg(target_os = "macos")]
 pub use optimized::accelerate_mult;
+pub use optimized::{CpuMultiplier, fast_mult, ordered_mult};
 
 #[derive(PartialEq, Debug)]
 pub struct FlatMatrix {
@@ -21,7 +21,10 @@ impl FlatMatrix {
     }
 
     pub fn new(rows: usize, cols: usize) -> FlatMatrix {
-        let vals: Vec<f64> = vec![0.0; rows * cols];
+        let len = rows
+            .checked_mul(cols)
+            .expect("matrix dimensions overflow usize");
+        let vals: Vec<f64> = vec![0.0; len];
         FlatMatrix { rows, cols, vals }
     }
 

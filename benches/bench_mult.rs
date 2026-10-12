@@ -6,10 +6,40 @@ use matmult2::naive_mult;
 use matmult2::parallel_tiled_mult;
 use matmult2::random_fill;
 use matmult2::tiled_mult;
+use matmult2::{CpuMultiplier, fast_mult};
 
 fn main() {
     // Run registered benchmarks.
     divan::main();
+}
+
+#[divan::bench]
+fn fast_cpu(bencher: Bencher) {
+    let (a, b) = setup(MAT_SIZE);
+    black_box(fast_mult(&a, &b)); // Initialize persistent CPU workers before timing.
+    bencher.bench_local(|| {
+        black_box(fast_mult(&a, &b));
+    });
+}
+
+#[divan::bench(args = [1, 4, 12, 24])]
+fn packed_gemm(bencher: Bencher, threads: usize) {
+    let (a, b) = setup(MAT_SIZE);
+    let engine = CpuMultiplier::new(threads);
+    black_box(engine.multiply(&a, &b));
+    bencher.bench_local(|| {
+        black_box(engine.multiply(&a, &b));
+    });
+}
+
+#[divan::bench(args = [1, 4, 12, 32])]
+fn packed_ordered(bencher: Bencher, threads: usize) {
+    let (a, b) = setup(MAT_SIZE);
+    let engine = CpuMultiplier::new(threads);
+    black_box(engine.multiply_ordered(&a, &b));
+    bencher.bench_local(|| {
+        black_box(engine.multiply_ordered(&a, &b));
+    });
 }
 
 fn setup(size: usize) -> (FlatMatrix, FlatMatrix) {
