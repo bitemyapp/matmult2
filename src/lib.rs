@@ -3,7 +3,9 @@ use std::cmp::min;
 use std::mem::swap;
 
 mod optimized;
-pub use optimized::ordered_mult;
+pub use optimized::{CpuMultiplier, ordered_mult};
+#[cfg(target_os = "macos")]
+pub use optimized::accelerate_mult;
 
 #[derive(PartialEq, Debug)]
 pub struct FlatMatrix {

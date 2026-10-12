@@ -7,7 +7,9 @@ edition = "2024"
 approx = "0.5.1"
 crossbeam = "0.8.5"
 divan = "0.1.21"
+gemm = { version = "0.19", default-features = false, features = ["std", "rayon", "x86-v4"] }
 rand = "0.10.3"
+rayon = "1.11"
 
 [profile.bench]
 #debug = true # enable for samply runs

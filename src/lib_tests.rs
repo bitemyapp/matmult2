@@ -19,6 +19,26 @@ fn ordered_matches_reference_bits() {
     }
 }
 
+#[test]
+fn fast_backends_match_rectangular_reference() {
+    for threads in [1, 2, 4] {
+        let engine = CpuMultiplier::new(threads);
+        for (m, k, n) in [(0, 3, 2), (3, 0, 2), (3, 2, 0), (1, 1, 1),
+            (3, 5, 7), (63, 64, 65), (65, 129, 67), (128, 127, 129), (7, 513, 19)] {
+            let mut a = FlatMatrix::new(m, k);
+            let mut b = FlatMatrix::new(k, n);
+            random_fill(&mut a, 1);
+            random_fill(&mut b, 2);
+            for x in &mut a.vals { *x = *x * 2.0 - 1.0; }
+            for x in &mut b.vals { *x = *x * 2.0 - 1.0; }
+            let reference = naive_local_mult(&a, &b);
+            assert_approx_eq(&reference, &engine.multiply(&a, &b), 1e-11);
+            #[cfg(target_os = "macos")]
+            assert_approx_eq(&reference, &accelerate_mult(&a, &b), 1e-11);
+        }
+    }
+}
+
 fn assert_approx_eq(a: &FlatMatrix, b: &FlatMatrix, tolerance: f64) {
     assert_eq!(a.rows, b.rows);
     assert_eq!(a.cols, b.cols);
