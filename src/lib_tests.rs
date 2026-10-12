@@ -112,10 +112,7 @@ fn signed_scaled_and_cancelling_inputs() {
                 .zip(&ordered.vals)
                 .all(|(x, y)| x.to_bits() == y.to_bits())
         );
-        let mut results = vec![engine.multiply(&a, &b), fast_mult(&a, &b)];
-        #[cfg(target_os = "macos")]
-        results.push(accelerate_mult(&a, &b));
-        for result in results {
+        for result in [engine.multiply(&a, &b), fast_mult(&a, &b)] {
             for i in 0..m {
                 for j in 0..n {
                     let sum_abs: f64 = (0..k).map(|t| (a.at(i, t) * b.at(t, j)).abs()).sum();

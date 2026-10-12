@@ -100,7 +100,7 @@ fn main() {
     }
     times.sort_by(f64::total_cmp);
     let percentile = |p: f64| times[((samples as f64 * p).ceil() as usize).saturating_sub(1)];
-    let p50 = percentile(0.5);
+    let p50 = (times[(samples - 1) / 2] + times[samples / 2]) * 0.5;
     eprintln!(
         "{algorithm} n={n} threads={threads} tile={tile}: median={p50:.3} ms p95={:.3} ms p99={:.3} ms min={:.3} ms max={:.3} ms GFLOP/s={:.2}",
         percentile(0.95),
