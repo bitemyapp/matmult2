@@ -32,6 +32,7 @@ fn fast_backends_match_rectangular_reference() {
             for x in &mut a.vals { *x = *x * 2.0 - 1.0; }
             for x in &mut b.vals { *x = *x * 2.0 - 1.0; }
             let reference = naive_local_mult(&a, &b);
+            assert_eq!(reference, engine.multiply_ordered(&a, &b));
             assert_approx_eq(&reference, &engine.multiply(&a, &b), 1e-11);
             #[cfg(target_os = "macos")]
             assert_approx_eq(&reference, &accelerate_mult(&a, &b), 1e-11);

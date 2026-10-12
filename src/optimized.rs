@@ -1,4 +1,5 @@
 use super::{FlatMatrix, validate_dimensions};
+use rayon::prelude::*;
 
 /// Reusable CPU workers for packed SIMD matrix multiplication. Construct once
 /// and reuse: starting a pool is setup, while matrix packing is done per call.
@@ -45,6 +46,71 @@ impl CpuMultiplier {
         }
         out
     }
+
+    /// Packed 4-by-8 register tiles, preserving the naive dot product order.
+    /// Safe Rust throughout; all packing and output allocation happen per call.
+    pub fn multiply_ordered(&self, a: &FlatMatrix, b: &FlatMatrix) -> FlatMatrix {
+        validate_dimensions(a, b);
+        let mut out = FlatMatrix::new(a.rows, b.cols);
+        if a.rows == 0 || b.cols == 0 || a.cols == 0 { return out; }
+        let compute = || {
+            let mut packed = vec![[0.0; 8]; b.cols.div_ceil(8) * a.cols];
+            let pack = |(j, panel): (usize, &mut [[f64; 8]])| {
+                let j = j * 8;
+                let width = 8.min(b.cols - j);
+                for (k, row) in panel.iter_mut().enumerate() {
+                    row[..width].copy_from_slice(&b.vals[k*b.cols+j..k*b.cols+j+width]);
+                }
+            };
+            if self.threads == 1 {
+                packed.chunks_mut(a.cols).enumerate().for_each(pack);
+            } else {
+                packed.par_chunks_mut(a.cols).enumerate().for_each(pack);
+            }
+            let run = |(band_id, band): (usize, &mut [f64])| {
+                let first = band_id * 32;
+                let rows = band.len() / b.cols;
+                for i in (0..rows).step_by(4) {
+                    let height = 4.min(rows-i);
+                    let lhs: [&[f64]; 4] = std::array::from_fn(|r| {
+                        let row = first+i+r.min(height-1);
+                        &a.vals[row*a.cols..(row+1)*a.cols]
+                    });
+                    for (j, panel) in packed.chunks_exact(a.cols).enumerate() {
+                        let sums = ordered_kernel(lhs, panel);
+                        let j = j * 8;
+                        let width = 8.min(b.cols-j);
+                        for r in 0..height {
+                            band[(i+r)*b.cols+j..(i+r)*b.cols+j+width]
+                                .copy_from_slice(&sums[r][..width]);
+                        }
+                    }
+                }
+            };
+            if self.threads == 1 {
+                out.vals.chunks_mut(32*b.cols).enumerate().for_each(run);
+            } else {
+                out.vals.par_chunks_mut(32*b.cols).enumerate().for_each(run);
+            }
+        };
+        match &self.pool {
+            Some(pool) => pool.install(compute),
+            None => { let mut compute = compute; compute(); }
+        }
+        out
+    }
+}
+
+#[inline]
+fn ordered_kernel(a: [&[f64]; 4], b: &[[f64; 8]]) -> [[f64; 8]; 4] {
+    let mut sums = [[0.0; 8]; 4];
+    for (k, rhs) in b.iter().enumerate() {
+        for r in 0..4 {
+            let x = a[r][k];
+            for j in 0..8 { sums[r][j] += x * rhs[j]; }
+        }
+    }
+    sums
 }
 
 /// Apple's native CPU BLAS. Accelerate chooses its own CPU thread count.

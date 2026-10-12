@@ -16,7 +16,7 @@ fn main() {
     let mut b = FlatMatrix::new(n, n);
     random_fill(&mut a, 1);
     random_fill(&mut b, 2);
-    let engine = (algorithm == "gemm").then(|| CpuMultiplier::new(threads));
+    let engine = matches!(algorithm, "gemm" | "packed-ordered").then(|| CpuMultiplier::new(threads));
     let multiply = || match algorithm {
         "naive" => naive_local_mult(black_box(&a), black_box(&b)),
         "tiled" => tiled_mult(black_box(&a), black_box(&b), tile),
@@ -24,6 +24,7 @@ fn main() {
         "fused" => fused_mul_add(black_box(&a), black_box(&b)),
         "ordered" => ordered_mult(black_box(&a), black_box(&b)),
         "gemm" => engine.as_ref().unwrap().multiply(black_box(&a), black_box(&b)),
+        "packed-ordered" => engine.as_ref().unwrap().multiply_ordered(black_box(&a), black_box(&b)),
         #[cfg(target_os = "macos")]
         "accelerate" => accelerate_mult(black_box(&a), black_box(&b)),
         _ => panic!("unknown algorithm: {algorithm}"),
