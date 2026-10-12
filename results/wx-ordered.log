@@ -1,0 +1,1 @@
+ordered n=1024 threads=4 tile=16: median=145.660 ms p95=158.846 ms p99=159.728 ms min=145.213 ms max=159.728 ms GFLOP/s=14.74

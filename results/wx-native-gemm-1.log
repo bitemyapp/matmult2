@@ -1,0 +1,1 @@
+gemm n=1024 threads=1 tile=16: median=14.282 ms p95=15.553 ms p99=16.098 ms min=14.066 ms max=16.098 ms GFLOP/s=150.36

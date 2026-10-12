@@ -1,0 +1,50 @@
+target/release/bench_cpu naive 1024 30 1 8
+worker setup: 0.000 ms
+first call: 1334.197 ms (includes lazy initialization, excludes result drop)
+naive n=1024 threads=1 tile=8: median=1329.534 ms p95=1674.788 ms p99=1779.788 ms min=1123.434 ms max=1779.788 ms GFLOP/s=1.62
+target/release/bench_cpu fast 1024 200 12 8
+worker setup: 0.000 ms
+first call: 5.724 ms (includes lazy initialization, excludes result drop)
+verified all 1048576 elements, max absolute error 1.7053025658242404e-13
+fast n=1024 threads=12 tile=8: median=3.806 ms p95=5.072 ms p99=5.931 ms min=3.541 ms max=6.504 ms GFLOP/s=564.23
+target/release/bench_cpu tiled 1024 30 1 8
+worker setup: 0.000 ms
+first call: 466.314 ms (includes lazy initialization, excludes result drop)
+tiled n=1024 threads=1 tile=8: median=439.008 ms p95=464.473 ms p99=499.070 ms min=418.014 ms max=499.070 ms GFLOP/s=4.89
+target/release/bench_cpu parallel 1024 30 4 8
+worker setup: 0.000 ms
+first call: 119.416 ms (includes lazy initialization, excludes result drop)
+parallel n=1024 threads=4 tile=8: median=117.534 ms p95=138.591 ms p99=179.252 ms min=112.894 ms max=179.252 ms GFLOP/s=18.27
+target/release/bench_cpu parallel 1024 30 18 8
+worker setup: 0.000 ms
+first call: 37.503 ms (includes lazy initialization, excludes result drop)
+parallel n=1024 threads=18 tile=8: median=41.430 ms p95=43.833 ms p99=44.726 ms min=39.129 ms max=44.726 ms GFLOP/s=51.83
+target/release/bench_cpu gemm 1024 40 1 8
+worker setup: 0.001 ms
+first call: 42.435 ms (includes lazy initialization, excludes result drop)
+verified all 1048576 elements, max absolute error 1.7053025658242404e-13
+gemm n=1024 threads=1 tile=8: median=42.163 ms p95=43.852 ms p99=44.089 ms min=39.853 ms max=44.089 ms GFLOP/s=50.93
+target/release/bench_cpu gemm 1024 100 4 8
+worker setup: 0.069 ms
+first call: 13.755 ms (includes lazy initialization, excludes result drop)
+verified all 1048576 elements, max absolute error 1.7053025658242404e-13
+gemm n=1024 threads=4 tile=8: median=11.566 ms p95=12.638 ms p99=13.374 ms min=11.045 ms max=13.468 ms GFLOP/s=185.67
+target/release/bench_cpu gemm 1024 200 12 8
+worker setup: 0.125 ms
+first call: 5.365 ms (includes lazy initialization, excludes result drop)
+verified all 1048576 elements, max absolute error 1.7053025658242404e-13
+gemm n=1024 threads=12 tile=8: median=7.703 ms p95=13.768 ms p99=23.239 ms min=4.821 ms max=32.493 ms GFLOP/s=278.78
+target/release/bench_cpu packed-ordered 1024 100 12 8
+worker setup: 0.185 ms
+first call: 12.693 ms (includes lazy initialization, excludes result drop)
+verified all 1048576 elements, max absolute error 0e0
+packed-ordered n=1024 threads=12 tile=8: median=11.702 ms p95=16.654 ms p99=18.677 ms min=9.344 ms max=21.484 ms GFLOP/s=183.52
+target/release/bench_cpu cold-gemm 1024 100 12 8
+worker setup: 0.000 ms
+first call: 6.419 ms (includes lazy initialization, excludes result drop)
+cold-gemm n=1024 threads=12 tile=8: median=9.344 ms p95=16.289 ms p99=34.479 ms min=5.198 ms max=36.011 ms GFLOP/s=229.82
+target/release/bench_cpu fast 1024 200 12 8
+worker setup: 0.000 ms
+first call: 6.727 ms (includes lazy initialization, excludes result drop)
+verified all 1048576 elements, max absolute error 1.7053025658242404e-13
+fast n=1024 threads=12 tile=8: median=4.429 ms p95=5.889 ms p99=6.515 ms min=4.016 ms max=6.894 ms GFLOP/s=484.89

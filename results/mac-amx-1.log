@@ -1,0 +1,2 @@
+verified all 1048576 elements, max absolute error 1.7053025658242404e-13
+gemm n=1024 threads=1 tile=16: median=36.997 ms p95=38.083 ms p99=39.214 ms min=36.637 ms max=39.214 ms GFLOP/s=58.04

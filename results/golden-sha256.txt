@@ -1,0 +1,3 @@
+960d85f6f6102aa6f192ad3c681c3fa3dda3040dd8fa3f90dc71231119be66c0  results/golden-naive-17.bin
+960d85f6f6102aa6f192ad3c681c3fa3dda3040dd8fa3f90dc71231119be66c0  results/golden-ordered-17.bin
+960d85f6f6102aa6f192ad3c681c3fa3dda3040dd8fa3f90dc71231119be66c0  results/golden-packed-17.bin

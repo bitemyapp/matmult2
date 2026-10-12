@@ -1,0 +1,2 @@
+verified all 1048576 elements, max absolute error 1.7053025658242404e-13
+accelerate n=1024 threads=4 tile=16: median=5.849 ms p95=6.713 ms p99=6.745 ms min=5.123 ms max=6.745 ms GFLOP/s=367.14

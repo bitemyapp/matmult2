@@ -1,0 +1,3 @@
+worker setup: 0.000 ms
+first call: 0.154 ms (includes lazy initialization, excludes result drop)
+fast n=256 threads=4 tile=16: median=0.081 ms p95=0.085 ms p99=0.087 ms min=0.076 ms max=0.087 ms GFLOP/s=414.68

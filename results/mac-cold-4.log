@@ -1,0 +1,3 @@
+worker setup: 0.000 ms
+first call: 13.722 ms (includes lazy initialization, excludes result drop)
+cold-gemm n=1024 threads=4 tile=16: median=12.001 ms p95=12.317 ms p99=12.718 ms min=11.510 ms max=12.718 ms GFLOP/s=178.94

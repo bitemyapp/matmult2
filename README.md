@@ -1,9 +1,39 @@
 # CPU matrix multiplication
 
-This checkout preserves the original loops and adds faster CPU-only
-implementations for row-major `f64` matrices. [PERFORMANCE.md](PERFORMANCE.md)
-has results for an Apple M5 Max and a Threadripper PRO 9985WX, numerical checks,
-and links to the raw measurements.
+This fork of [lukewassink/matmult2](https://github.com/lukewassink/matmult2)
+preserves the original loops and adds faster CPU-only implementations for
+row-major `f64` matrices.
+
+## Before and after
+
+Median time to multiply two **1024 × 1024 f64** matrices, measured on each
+machine with release builds:
+
+| Machine | Original naive | Best original parallel tested | New default | Speedup vs naive / parallel |
+|---|---:|---:|---:|---:|
+| M5 Max MacBook Pro | 1,329.53 ms | 41.430 ms (18 threads) | **4.258 ms** | **312× / 9.7×** |
+| Threadripper PRO 9985WX | 2,750.64 ms | 15.867 ms (48 threads) | **0.980 ms** | **2,807× / 16.2×** |
+
+The original inner loop reads the right-hand matrix with an 8 KB stride and
+updates one dependent accumulator. We added contiguous traversal, cache
+blocking, and packed register tiles. The fastest path uses tuned SIMD kernels:
+the Rust `gemm` crate with AVX-512 and 24 reusable workers on the workstation,
+and Apple's current Accelerate CPU BLAS on the Mac. Sweeping worker counts
+showed that using every logical CPU was slower for this workload.
+
+Timing includes output allocation, packing, multiplication, and result
+destruction, with worker initialization measured separately. Each original
+baseline has 30 samples; each new-default result combines two 200-sample runs.
+Both were live machines, and Mac timings varied with background load.
+
+All 10 release tests passed on both machines. Every element of the full-size
+results was checked against the original: maximum absolute differences were
+1.71e-13 on the Mac and 1.25e-12 on the workstation. The fast paths use FMA and
+can change rounding; an option preserving the original arithmetic order is
+also included. All paths retain `f64` precision and use only CPUs.
+
+See [the detailed report](PERFORMANCE.md) for p95s, startup costs, numerical
+checks, and limitations, or [the raw timing summary](results/final-summary.csv).
 
 ## Use
 

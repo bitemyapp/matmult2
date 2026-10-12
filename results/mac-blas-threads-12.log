@@ -1,0 +1,1 @@
+accelerate n=1024 threads=12 tile=16: median=4.176 ms p95=5.053 ms p99=5.673 ms min=3.951 ms max=5.673 ms GFLOP/s=514.20

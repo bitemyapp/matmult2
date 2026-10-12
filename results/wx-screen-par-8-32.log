@@ -1,0 +1,3 @@
+worker setup: 0.000 ms
+first call: 151.970 ms (includes lazy initialization, excludes result drop)
+parallel n=1024 threads=8 tile=32: median=145.056 ms p95=147.368 ms p99=147.368 ms min=143.659 ms max=147.368 ms GFLOP/s=14.80

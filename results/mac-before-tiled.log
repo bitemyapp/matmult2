@@ -1,0 +1,19 @@
+tiled n=1024 threads=1 tile=16: median=426.192 ms p95=434.229 ms p99=439.389 ms min=422.284 ms max=439.389 ms GFLOP/s=5.04
+        9.41 real         9.36 user         0.02 sys
+            27328512  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                1871  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                2530  involuntary context switches
+        358570366755  instructions retired
+         39919889246  cycles elapsed
+            26673536  peak memory footprint

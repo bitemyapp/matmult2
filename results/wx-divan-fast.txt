@@ -1,0 +1,4 @@
+Timer precision: 20 ns
+bench_mult   fastest       │ slowest       │ median        │ mean          │ samples │ iters
+╰─ fast_cpu  945.2 µs      │ 1.716 ms      │ 968.5 µs      │ 1.014 ms      │ 100     │ 100
+

@@ -1,0 +1,21 @@
+worker setup: 0.000 ms
+first call: 5.059 ms (includes lazy initialization, excludes result drop)
+fast n=1024 threads=4 tile=16: median=3.487 ms p95=3.664 ms p99=4.134 ms min=3.422 ms max=4.817 ms GFLOP/s=615.77
+        0.45 real         0.95 user         0.02 sys
+            42991616  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                2844  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                1280  involuntary context switches
+          4395078285  instructions retired
+          4181294950  cycles elapsed
+            38765120  peak memory footprint

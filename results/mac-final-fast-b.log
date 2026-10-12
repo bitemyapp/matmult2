@@ -1,0 +1,4 @@
+worker setup: 0.000 ms
+first call: 6.727 ms (includes lazy initialization, excludes result drop)
+verified all 1048576 elements, max absolute error 1.7053025658242404e-13
+fast n=1024 threads=12 tile=8: median=4.429 ms p95=5.889 ms p99=6.515 ms min=4.016 ms max=6.894 ms GFLOP/s=484.89
