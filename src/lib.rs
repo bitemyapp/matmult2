@@ -10,6 +10,11 @@ pub struct FlatMatrix {
 }
 
 impl FlatMatrix {
+    /// Row-major elements, for inspecting results without copying them.
+    pub fn as_slice(&self) -> &[f64] {
+        &self.vals
+    }
+
     pub fn new(rows: usize, cols: usize) -> FlatMatrix {
         let vals: Vec<f64> = vec![0.0; rows * cols];
         FlatMatrix { rows, cols, vals }
